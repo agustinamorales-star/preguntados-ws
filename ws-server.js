@@ -1,22 +1,28 @@
-const WebSocket = require("ws");
+import { WebSocketServer } from "ws";
+import http from "http";
 
-const port = process.env.PORT || 10000;
-const wss = new WebSocket.Server({ port });
+const PORT = process.env.PORT || 10000;
 
-console.log("Servidor WebSocket activo en puerto:", port);
+// Servidor HTTP básico (necesario para Render)
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end("WebSocket server running");
+});
+
+const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
-  console.log("Cliente conectado:", wss.clients.size);
+  console.log("Cliente conectado");
 
   ws.on("message", (msg) => {
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(msg.toString());
-      }
-    });
+    console.log("Mensaje recibido:", msg.toString());
   });
 
   ws.on("close", () => {
-    console.log("Cliente desconectado:", wss.clients.size);
+    console.log("Cliente desconectado");
   });
+});
+
+server.listen(PORT, () => {
+  console.log("Servidor WebSocket activo en puerto:", PORT);
 });
