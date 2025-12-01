@@ -2,6 +2,7 @@
   "name": "preguntados-ws",
   "version": "1.0.0",
   "main": "ws-server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node ws-server.js"
   },
